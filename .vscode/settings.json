@@ -1,0 +1,7 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "[json][jsonc][typescriptreact][typescript][javascript][css][scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
