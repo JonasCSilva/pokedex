@@ -1,10 +1,8 @@
-'use client'
-
 import { Card } from '../(card)/Card'
 import { Pokemon } from '../types'
 import styles from './styles.module.scss'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
-import { memo, UIEventHandler, useMemo, useRef } from 'react'
+import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useMemo, useRef } from 'react'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 const SIZE = 24
@@ -31,8 +29,12 @@ async function getData(key: string): Promise<Pokemon[]> {
 
 const getKey: SWRInfiniteKeyLoader = (index: number) => `offset=${SIZE * index}`
 
-export function List() {
-  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getData)
+export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokemon | null>> }) {
+  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getData, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateAll: false
+  })
   const scrollElement = useRef<HTMLElement>(null)
 
   const array: Pokemon[] = useMemo(() => {
@@ -41,16 +43,19 @@ export function List() {
     return array.concat(...data)
   }, [data])
 
-  const handleScroll: UIEventHandler<HTMLElement> = event => {
-    const { scrollTop, offsetHeight } = event.currentTarget
+  const handleScroll: UIEventHandler<HTMLElement> = useCallback(
+    event => {
+      const { scrollTop, offsetHeight } = event.currentTarget
 
-    const current = scrollTop + offsetHeight
-    const target = SIZE * (size / 4) * (352 + 32) + 120 + 32
+      const current = scrollTop + offsetHeight
+      const target = SIZE * (size / 4) * (352 + 32) + 120 + 32
 
-    if (current >= target) {
-      setSize(prev => prev + 1)
-    }
-  }
+      if (current >= target) {
+        setSize(prev => prev + 1)
+      }
+    },
+    [size, setSize]
+  )
 
   return (
     <>
@@ -61,7 +66,7 @@ export function List() {
       ) : (
         <main className={styles.main} onScroll={handleScroll} ref={scrollElement}>
           {array.map(pokemon => (
-            <MemoizedCard key={pokemon.id} pokemon={pokemon} />
+            <MemoizedCard key={pokemon.id} pokemon={pokemon} setPokemon={setPokemon} />
           ))}
           <div className={styles.loaderContainer}>
             <ClipLoader loading={isValidating} color='red' size={100} />

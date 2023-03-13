@@ -4,14 +4,27 @@ import styles from './styles.module.scss'
 import { motion } from 'framer-motion'
 import { typesColors } from '../lib'
 import { useInViewport } from 'react-in-viewport'
-import { useRef } from 'react'
+import { Dispatch, SetStateAction, useRef } from 'react'
 
-export function Card({ pokemon: { name, sprites, types, id } }: { pokemon: Pokemon }) {
+export function Card({
+  pokemon,
+  setPokemon
+}: {
+  pokemon: Pokemon
+  setPokemon: Dispatch<SetStateAction<Pokemon | null>>
+}) {
+  const { name, sprites, types, id } = pokemon
+
   const myRef = useRef(null)
   const { inViewport } = useInViewport(myRef, { threshold: 0.3 })
 
   return (
-    <motion.div whileHover={{ scale: 1.075, transition: { duration: 0.5 } }} className={styles.root} ref={myRef}>
+    <motion.div
+      whileHover={{ scale: 1.075, transition: { duration: 0.5 } }}
+      className={styles.root}
+      ref={myRef}
+      onClick={() => setPokemon(pokemon)}
+    >
       {inViewport && (
         <>
           <div className={styles.imageContainer}>
