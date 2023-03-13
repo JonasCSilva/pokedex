@@ -3,5 +3,21 @@
   row-gap: 2rem;
   column-gap: 3rem;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  width: 100%;
+  overflow-y: scroll;
+  padding: 2rem;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: span 4;
+  height: 120px;
+}
+
+.mainLoaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
