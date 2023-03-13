@@ -30,8 +30,7 @@ async function getData(key: string): Promise<Pokemon[]> {
 const getKey: SWRInfiniteKeyLoader = (index: number) => `offset=${SIZE * index}`
 
 export function List() {
-  const { data, isLoading, isValidating, setSize } = useSWRInfinite(getKey, getData)
-  const lastScrollHeight = useRef(0)
+  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getData)
   const scrollElement = useRef<HTMLElement>(null)
 
   const array: Pokemon[] = useMemo(() => {
@@ -41,10 +40,15 @@ export function List() {
   }, [data])
 
   const handleScroll: UIEventHandler<HTMLElement> = event => {
-    const { scrollTop, scrollHeight, offsetHeight } = event.currentTarget
+    const { scrollTop, offsetHeight } = event.currentTarget
 
-    if (lastScrollHeight.current <= scrollHeight && scrollTop + offsetHeight + 10 >= scrollHeight) {
-      lastScrollHeight.current = scrollHeight
+    const current = scrollTop + offsetHeight
+    const target = SIZE * (size / 4) * (352 + 32) + 120 + 32
+
+    // console.log('current: ' + current)
+    // console.log('target: ' + target)
+
+    if (current >= target) {
       setSize(prev => prev + 1)
     }
   }
