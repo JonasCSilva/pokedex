@@ -4,10 +4,12 @@ import { Card } from '../(card)/Card'
 import { Pokemon } from '../types'
 import styles from './styles.module.scss'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
-import { UIEventHandler, useMemo, useRef } from 'react'
+import { memo, UIEventHandler, useMemo, useRef } from 'react'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 const SIZE = 24
+
+const MemoizedCard = memo(Card)
 
 async function getData(key: string): Promise<Pokemon[]> {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${SIZE}&${key}`)
@@ -45,9 +47,6 @@ export function List() {
     const current = scrollTop + offsetHeight
     const target = SIZE * (size / 4) * (352 + 32) + 120 + 32
 
-    // console.log('current: ' + current)
-    // console.log('target: ' + target)
-
     if (current >= target) {
       setSize(prev => prev + 1)
     }
@@ -62,7 +61,7 @@ export function List() {
       ) : (
         <main className={styles.main} onScroll={handleScroll} ref={scrollElement}>
           {array.map(pokemon => (
-            <Card key={pokemon.id} pokemon={pokemon} />
+            <MemoizedCard key={pokemon.id} pokemon={pokemon} />
           ))}
           <div className={styles.loaderContainer}>
             <ClipLoader loading={isValidating} color='red' size={100} />
