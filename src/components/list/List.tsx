@@ -2,8 +2,8 @@ import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useMemo, u
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
 import ClipLoader from 'react-spinners/ClipLoader'
 import styles from './styles.module.scss'
-import { Card } from '../(card)/Card'
-import { Pokemon } from '../types'
+import { Card } from '../card/Card'
+import { Pokemon } from '../../lib/types'
 
 const SIZE = 24
 

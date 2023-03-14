@@ -1,10 +1,10 @@
 'use client'
 
 import { Inter } from 'next/font/google'
-import { List } from './(list)/List'
+import { List } from '../../components/list/List'
 import styles from './page.module.scss'
 import { memo, useState } from 'react'
-import { Pokemon } from './types'
+import { Pokemon } from '../../lib/types'
 
 const inter = Inter({ subsets: ['latin'] })
 

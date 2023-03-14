@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import { Pokemon, TypesNames } from '../types'
+import { Pokemon, TypesNames } from '../../lib/types'
 import styles from './styles.module.scss'
 import { motion } from 'framer-motion'
-import { typesColors } from '../lib'
+import { typesColors } from '../../lib/typesColors'
 import { useInViewport } from 'react-in-viewport'
 import { Dispatch, SetStateAction, useRef } from 'react'
 
