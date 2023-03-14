@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useMemo, useRef } from 'react'
+import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useEffect, useMemo, useRef } from 'react'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
 import ClipLoader from 'react-spinners/ClipLoader'
 import styles from './styles.module.scss'
@@ -6,6 +6,7 @@ import { Card } from '../card/Card'
 import { Pokemon } from '../../lib/types'
 
 const SIZE = 24
+const LIMIT = 400 /* 1010 */
 
 const MemoizedCard = memo(Card)
 
@@ -21,7 +22,7 @@ async function fetchGraphQL(query: string) {
 }
 
 async function getPokemon(key: string): Promise<Pokemon[]> {
-  const { data } = await fetchGraphQL(
+  const response = await fetchGraphQL(
     `{
       pokemon: pokemon_v2_pokemon(limit: ${SIZE}, offset: ${key}) {
         name
@@ -43,18 +44,24 @@ async function getPokemon(key: string): Promise<Pokemon[]> {
     }`
   )
 
-  return data.pokemon
+  return response.data.pokemon
 }
 
 const getKey: SWRInfiniteKeyLoader = (index: number) => `${SIZE * index}`
 
-export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokemon | null>> }) {
+export function List({
+  setPokemon,
+  setProgess
+}: {
+  setPokemon: Dispatch<SetStateAction<Pokemon | null>>
+  setProgess: Dispatch<SetStateAction<number>>
+}) {
   const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getPokemon, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateAll: false
   })
-  const scrollElement = useRef<HTMLElement>(null)
+  const scrollElementRef = useRef<HTMLElement>(null)
 
   const array: Pokemon[] = useMemo(() => {
     const array: Pokemon[] = []
@@ -62,18 +69,39 @@ export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokem
     return array.concat(...data)
   }, [data])
 
+  useEffect(() => {
+    if (!scrollElementRef.current || !data || data?.length == 0) return
+    const { scrollTop, offsetHeight } = scrollElementRef.current
+    const size = ([] as Pokemon[]).concat(...data).length / SIZE
+
+    const current = scrollTop + offsetHeight
+    const target = SIZE * (size / 4) * (21 * 16 + 32) + 120 + 64
+
+    if (SIZE * (size + 1) < LIMIT) {
+      setProgess((current - offsetHeight) / (target - offsetHeight))
+    } else {
+      setProgess((current - offsetHeight) / (target - 120 - offsetHeight))
+    }
+  }, [data, setProgess])
+
   const handleScroll: UIEventHandler<HTMLElement> = useCallback(
     event => {
       const { scrollTop, offsetHeight } = event.currentTarget
 
       const current = scrollTop + offsetHeight
-      const target = SIZE * (size / 4) * (352 + 32) + 120 + 64
+      const target = SIZE * (size / 4) * (21 * 16 + 32) + 120 + 64
 
-      if (current >= target && SIZE * (size + 1) < 1010) {
+      if (current >= target && SIZE * (size + 1) < LIMIT) {
         setSize(prev => prev + 1)
       }
+
+      if (SIZE * (size + 1) < LIMIT) {
+        setProgess((current - offsetHeight) / (target - offsetHeight))
+      } else {
+        setProgess((current - offsetHeight) / (target - 120 - offsetHeight))
+      }
     },
-    [size, setSize]
+    [size, setSize, setProgess]
   )
 
   return (
@@ -83,13 +111,15 @@ export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokem
           <ClipLoader loading color='red' size={200} />
         </div>
       ) : (
-        <main className={styles.main} onScroll={handleScroll} ref={scrollElement}>
+        <main className={styles.main} onScroll={handleScroll} ref={scrollElementRef}>
           {array.map(pokemon => (
             <MemoizedCard key={pokemon.id} pokemon={pokemon} setPokemon={setPokemon} />
           ))}
-          <div className={styles.loaderContainer}>
-            <ClipLoader loading={isValidating} color='red' size={100} />
-          </div>
+          {SIZE * (size + 1) < LIMIT && (
+            <div className={styles.loaderContainer}>
+              {isValidating && <ClipLoader loading color='red' size={100} />}
+            </div>
+          )}
         </main>
       )}
     </>
