@@ -13,14 +13,14 @@ export function Card({
   pokemon: Pokemon
   setPokemon: Dispatch<SetStateAction<Pokemon | null>>
 }) {
-  const { name, sprites, types, id } = pokemon
+  const { name, types, id } = pokemon
 
   const myRef = useRef(null)
   const { inViewport } = useInViewport(myRef, { threshold: 0.3 })
 
   return (
     <motion.div
-      whileHover={{ scale: 1.075, transition: { duration: 0.5 } }}
+      whileHover={{ scale: 1.075, transition: { duration: 0.3 } }}
       className={styles.root}
       ref={myRef}
       onClick={() => setPokemon(pokemon)}
@@ -28,7 +28,13 @@ export function Card({
       {inViewport && (
         <>
           <div className={styles.imageContainer}>
-            <Image src={sprites.front_default} alt={name + ' sprite'} fill sizes='20vw' className={styles.image} />
+            <Image
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
+              alt={name + ' sprite'}
+              fill
+              sizes='10vw'
+              className={styles.image}
+            />
           </div>
           <h4 className={styles.id}>Nº {id}</h4>
           <h2>{name.at(0)!.toUpperCase() + name.slice(1)}</h2>

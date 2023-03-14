@@ -1,36 +1,48 @@
+import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useMemo, useRef } from 'react'
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
+import ClipLoader from 'react-spinners/ClipLoader'
+import styles from './styles.module.scss'
 import { Card } from '../(card)/Card'
 import { Pokemon } from '../types'
-import styles from './styles.module.scss'
-import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
-import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useMemo, useRef } from 'react'
-import ClipLoader from 'react-spinners/ClipLoader'
 
 const SIZE = 24
 
 const MemoizedCard = memo(Card)
 
-async function getData(key: string): Promise<Pokemon[]> {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${SIZE}&${key}`)
+async function fetchGraphQL(query: string) {
+  const result = await fetch('https://beta.pokeapi.co/graphql/v1beta', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: query
+    })
+  })
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-
-  const { results } = await res.json()
-
-  const promises = []
-
-  for (const result of results) {
-    promises.push(fetch(result.url).then(res => res.json()))
-  }
-
-  return Promise.all(promises)
+  return result.json()
 }
 
-const getKey: SWRInfiniteKeyLoader = (index: number) => `offset=${SIZE * index}`
+async function getPokemon(key: string): Promise<Pokemon[]> {
+  const { data } = await fetchGraphQL(
+    `{
+      pokemon: pokemon_v2_pokemon(limit: ${SIZE}, offset: ${key}) {
+        name
+        id
+        weight
+        types: pokemon_v2_pokemontypes {
+          type: pokemon_v2_type {
+            name
+          }
+        }
+      }
+    }`
+  )
+
+  return data.pokemon
+}
+
+const getKey: SWRInfiniteKeyLoader = (index: number) => `${SIZE * index}`
 
 export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokemon | null>> }) {
-  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getData, {
+  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getPokemon, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateAll: false
@@ -48,9 +60,9 @@ export function List({ setPokemon }: { setPokemon: Dispatch<SetStateAction<Pokem
       const { scrollTop, offsetHeight } = event.currentTarget
 
       const current = scrollTop + offsetHeight
-      const target = SIZE * (size / 4) * (352 + 32) + 120 + 32
+      const target = SIZE * (size / 4) * (352 + 32) + 120 + 64
 
-      if (current >= target) {
+      if (current >= target && SIZE * (size + 1) < 1010) {
         setSize(prev => prev + 1)
       }
     },
