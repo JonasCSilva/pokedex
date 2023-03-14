@@ -5,6 +5,7 @@ import { List } from '../../components/list/List'
 import styles from './page.module.scss'
 import { memo, useState } from 'react'
 import { Pokemon } from '../../lib/types'
+import { Aside } from '@/components/aside/Aside'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +18,7 @@ export default function Page() {
     <main className={[inter.className, styles.root].join(' ')}>
       <h1 className={styles.heading}>Pokedex</h1>
       <MemoizedList setPokemon={setPokemon} />
-      <aside className={styles.aside}>{pokemon?.name}</aside>
+      <Aside pokemon={pokemon} />
     </main>
   )
 }

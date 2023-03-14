@@ -27,8 +27,15 @@ async function getPokemon(key: string): Promise<Pokemon[]> {
         name
         id
         weight
+        height
+        base_experience
         types: pokemon_v2_pokemontypes {
           type: pokemon_v2_type {
+            name
+          }
+        }
+        abilities: pokemon_v2_pokemonabilities {
+          ability: pokemon_v2_ability {
             name
           }
         }

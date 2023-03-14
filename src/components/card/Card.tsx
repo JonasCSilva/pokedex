@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { typesColors } from '../../lib/typesColors'
 import { useInViewport } from 'react-in-viewport'
 import { Dispatch, SetStateAction, useRef } from 'react'
+import { firstLetterUpperCase } from '@/lib/functions'
 
 export function Card({
   pokemon,
@@ -37,9 +38,9 @@ export function Card({
             />
           </div>
           <h4 className={styles.id}>Nº {id}</h4>
-          <h2>{name.at(0)!.toUpperCase() + name.slice(1)}</h2>
+          <h2>{firstLetterUpperCase(name)}</h2>
           <div className={styles.typesContainer}>
-            {types.map(({ type: { name } }: { type: { name: TypesNames } }) => (
+            {types.map(({ type: { name } }) => (
               <span key={name} className={styles.type} style={{ backgroundColor: typesColors[name] }}>
                 {name.toUpperCase()}
               </span>
