@@ -1,10 +1,14 @@
+import { PokemonContextPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
-import { Pokemon, TypesNames } from '@/lib/types'
+import { Pokemon } from '@/lib/types'
 import { typesColors } from '@/lib/typesColors'
 import Image from 'next/image'
+import { useContext } from 'react'
 import styles from './styles.module.scss'
 
-export function Aside({ pokemon }: { pokemon: Pokemon | null }) {
+export function Aside() {
+  const pokemon = useContext(PokemonContextPokemon)
+
   return (
     <aside className={styles.aside}>
       <main>

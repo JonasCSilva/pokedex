@@ -1,9 +1,10 @@
-import { Dispatch, memo, SetStateAction, UIEventHandler, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, UIEventHandler, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
 import ClipLoader from 'react-spinners/ClipLoader'
 import styles from './styles.module.scss'
 import { Card } from '../card/Card'
 import { Pokemon } from '../../lib/types'
+import { ScrollContextSetProgess } from '@/contexts/ScrollContext'
 
 const SIZE = 24
 const LIMIT = 400 /* 1010 */
@@ -49,19 +50,14 @@ async function getPokemon(key: string): Promise<Pokemon[]> {
 
 const getKey: SWRInfiniteKeyLoader = (index: number) => `${SIZE * index}`
 
-export function List({
-  setPokemon,
-  setProgess
-}: {
-  setPokemon: Dispatch<SetStateAction<Pokemon | null>>
-  setProgess: Dispatch<SetStateAction<number>>
-}) {
+export function List() {
   const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, getPokemon, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateAll: false
   })
   const scrollElementRef = useRef<HTMLElement>(null)
+  const setProgess = useContext(ScrollContextSetProgess)!
 
   const array: Pokemon[] = useMemo(() => {
     const array: Pokemon[] = []
@@ -113,7 +109,7 @@ export function List({
       ) : (
         <main className={styles.main} onScroll={handleScroll} ref={scrollElementRef}>
           {array.map(pokemon => (
-            <MemoizedCard key={pokemon.id} pokemon={pokemon} setPokemon={setPokemon} />
+            <MemoizedCard key={pokemon.id} pokemon={pokemon} />
           ))}
           {SIZE * (size + 1) < LIMIT && (
             <div className={styles.loaderContainer}>

@@ -1,23 +1,19 @@
 import Image from 'next/image'
-import { Pokemon, TypesNames } from '../../lib/types'
+import { Pokemon } from '../../lib/types'
 import styles from './styles.module.scss'
 import { motion } from 'framer-motion'
 import { typesColors } from '../../lib/typesColors'
 import { useInViewport } from 'react-in-viewport'
-import { Dispatch, SetStateAction, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import { firstLetterUpperCase } from '@/lib/functions'
+import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
 
-export function Card({
-  pokemon,
-  setPokemon
-}: {
-  pokemon: Pokemon
-  setPokemon: Dispatch<SetStateAction<Pokemon | null>>
-}) {
+export function Card({ pokemon }: { pokemon: Pokemon }) {
   const { name, types, id } = pokemon
 
   const myRef = useRef(null)
   const { inViewport } = useInViewport(myRef, { threshold: 0.3 })
+  const setPokemon = useContext(PokemonContextSetPokemon)!
 
   return (
     <motion.div
