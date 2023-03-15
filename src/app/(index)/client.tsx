@@ -12,16 +12,14 @@ const MemoizedAside = memo(Aside)
 const MemoizedList = memo(List)
 const MemoizedScrollbar = memo(Scrollbar)
 
-export function Client() {
-  return (
-    <PokemonContextProvider>
-      <ScrollContextProvider>
-        <DataContextProvider>
-          <MemoizedList />
-        </DataContextProvider>
-        <MemoizedScrollbar />
-      </ScrollContextProvider>
-      <MemoizedAside />
-    </PokemonContextProvider>
-  )
-}
+export const Client = () => (
+  <PokemonContextProvider>
+    <ScrollContextProvider>
+      <DataContextProvider>
+        <MemoizedList />
+      </DataContextProvider>
+      <MemoizedScrollbar />
+    </ScrollContextProvider>
+    <MemoizedAside />
+  </PokemonContextProvider>
+)

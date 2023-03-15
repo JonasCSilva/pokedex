@@ -1,6 +1,5 @@
 import { PokemonContextPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
-import { Pokemon } from '@/lib/types'
 import { typesColors } from '@/lib/typesColors'
 import Image from 'next/image'
 import { useContext } from 'react'

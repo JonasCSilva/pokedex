@@ -9,11 +9,11 @@ import { firstLetterUpperCase } from '@/lib/functions'
 import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
 
 export function Card({ pokemon }: { pokemon: Pokemon }) {
-  const { name, types, id } = pokemon
-
   const myRef = useRef(null)
   const { inViewport } = useInViewport(myRef, { threshold: 0.3 })
   const setPokemon = useContext(PokemonContextSetPokemon)!
+
+  const { name, types, id } = pokemon
 
   return (
     <motion.div

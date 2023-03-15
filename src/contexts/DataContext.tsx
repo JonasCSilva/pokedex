@@ -1,16 +1,16 @@
-import { LIMIT, SIZE } from '@/lib/consts'
 import { getKey, getPokemon } from '@/lib/functions'
 import { Pokemon } from '@/lib/types'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { createContext, ReactNode, RefObject, useMemo } from 'react'
 import useSWRInfinite from 'swr/infinite'
-import { ScrollContextSetProgess } from './ScrollContext'
+
+type SetSize = (size: number | ((_size: number) => number)) => Promise<Pokemon[][] | undefined>
 
 export const DataContextData = createContext<Pokemon[]>([])
 export const DataContextIsLoading = createContext(true)
-export const DataContextLoader = createContext({ isValidating: true, isThereMore: true })
-export const DataContextUpdateProgress = createContext<(() => void) | null>(null)
+export const DataContextIsValidating = createContext(false)
 export const DataContextRef = createContext<RefObject<HTMLElement> | null>(null)
 export const DataContextProgress = createContext(0)
+export const DataContextSetSize = createContext<SetSize | null>(null)
 
 const swrConfig = {
   revalidateIfStale: false,
@@ -19,51 +19,20 @@ const swrConfig = {
 }
 
 export function DataContextProvider({ children }: { children: ReactNode }) {
-  const scrollElementRef = useRef<HTMLElement>(null)
-  const { data, isLoading, isValidating, setSize } = useSWRInfinite(getKey, getPokemon, swrConfig)
-  const setProgress = useContext(ScrollContextSetProgess)!
+  const { data: rawData, isLoading, isValidating, setSize } = useSWRInfinite(getKey, getPokemon, swrConfig)
 
-  const array: Pokemon[] = useMemo(() => {
+  const data: Pokemon[] = useMemo(() => {
     const array: Pokemon[] = []
-    if (!data) return array
-    return array.concat(...data)
-  }, [data])
-
-  const isThereMore = useMemo(() => (data ? ([] as Pokemon[]).concat(...data).length <= LIMIT - SIZE : true), [data])
-
-  const updateProgress = useCallback(() => {
-    if (!scrollElementRef.current || !data || data?.length == 0) return
-    const { scrollTop, offsetHeight } = scrollElementRef.current
-    const size = ([] as Pokemon[]).concat(...data).length / SIZE
-
-    const current = scrollTop + offsetHeight
-    const target = SIZE * (size / 4) * (21 * 16 + 32) + 120 + 64
-
-    const isThereMore = SIZE * (size + 1) < LIMIT
-
-    if (current >= target && isThereMore) {
-      setSize(prev => prev + 1)
-    }
-
-    if (isThereMore) {
-      setProgress((current - offsetHeight) / (target - offsetHeight))
-    } else {
-      setProgress((current - offsetHeight) / (target - 120 - offsetHeight))
-    }
-  }, [data, setSize, setProgress])
-
-  useEffect(() => {
-    updateProgress()
-  }, [updateProgress])
+    if (!rawData) return array
+    return array.concat(...rawData)
+  }, [rawData])
 
   return (
-    <DataContextData.Provider value={array}>
+    <DataContextData.Provider value={data}>
       <DataContextIsLoading.Provider value={isLoading}>
-        <DataContextLoader.Provider value={{ isValidating, isThereMore }}>
-          <DataContextUpdateProgress.Provider value={updateProgress}>
-            <DataContextRef.Provider value={scrollElementRef}>{children}</DataContextRef.Provider>
-          </DataContextUpdateProgress.Provider>
-        </DataContextLoader.Provider>
+        <DataContextIsValidating.Provider value={isValidating}>
+          <DataContextSetSize.Provider value={setSize}>{children}</DataContextSetSize.Provider>
+        </DataContextIsValidating.Provider>
       </DataContextIsLoading.Provider>
     </DataContextData.Provider>
   )
