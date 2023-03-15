@@ -1,11 +1,13 @@
+import deepEqual from 'fast-deep-equal'
+import { memo, useContext, useEffect, useRef } from 'react'
+
+import { Card } from '@/components/card/Card'
+import { Loader } from '@/components/loader/Loader'
 import { DataContextData, DataContextSetSize } from '@/contexts/DataContext'
 import { ScrollContextSetProgess } from '@/contexts/ScrollContext'
-import { memo, useContext, useEffect, useRef } from 'react'
-import { Card } from '@/components/card/Card'
 import { LIMIT, SIZE } from '@/lib/consts'
-import { Loader } from '../loader/Loader'
+
 import styles from './styles.module.scss'
-import deepEqual from 'fast-deep-equal'
 
 const MemoizedCard = memo(Card, deepEqual)
 const MemoizedLoader = memo(Loader)

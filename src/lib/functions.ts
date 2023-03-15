@@ -1,6 +1,7 @@
 import { SWRInfiniteKeyLoader } from 'swr/infinite'
-import { SIZE } from './consts'
-import { Pokemon } from './types'
+
+import { SIZE } from '@/lib/consts'
+import { Pokemon } from '@/lib/types'
 
 export const firstLetterUpperCase = (string: string) => string.at(0)!.toUpperCase() + string.slice(1)
 

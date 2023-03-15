@@ -1,12 +1,14 @@
-import Image from 'next/image'
-import { Pokemon } from '../../lib/types'
-import styles from './styles.module.scss'
 import { motion } from 'framer-motion'
-import { typesColors } from '../../lib/typesColors'
-import { useInViewport } from 'react-in-viewport'
+import Image from 'next/image'
 import { useContext, useRef } from 'react'
-import { firstLetterUpperCase } from '@/lib/functions'
+import { useInViewport } from 'react-in-viewport'
+
 import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
+import { firstLetterUpperCase } from '@/lib/functions'
+import { Pokemon } from '@/lib/types'
+import { typesColors } from '@/lib/typesColors'
+
+import styles from './styles.module.scss'
 
 export function Card({ pokemon }: { pokemon: Pokemon }) {
   const myRef = useRef(null)

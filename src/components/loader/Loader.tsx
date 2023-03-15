@@ -1,8 +1,10 @@
-import { DataContextIsValidating, DataContextData } from '@/contexts/DataContext'
-import ClipLoader from 'react-spinners/ClipLoader'
 import { useContext } from 'react'
-import styles from './styles.module.scss'
+import ClipLoader from 'react-spinners/ClipLoader'
+
+import { DataContextData, DataContextIsValidating } from '@/contexts/DataContext'
 import { LIMIT, SIZE } from '@/lib/consts'
+
+import styles from './styles.module.scss'
 
 export function Loader() {
   const data = useContext(DataContextData)

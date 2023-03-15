@@ -1,5 +1,6 @@
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react'
+
 import { Pokemon } from '@/lib/types'
-import { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useState } from 'react'
 
 export const PokemonContextPokemon = createContext<Pokemon | null>(null)
 export const PokemonContextSetPokemon = createContext<Dispatch<SetStateAction<Pokemon | null>> | null>(null)

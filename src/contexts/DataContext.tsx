@@ -1,7 +1,8 @@
+import { ReactNode, RefObject, createContext, useMemo } from 'react'
+import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite'
+
 import { getKey, getPokemon } from '@/lib/functions'
 import { Pokemon } from '@/lib/types'
-import { createContext, ReactNode, RefObject, useMemo } from 'react'
-import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite'
 
 type SetSize = (size: number | ((_size: number) => number)) => Promise<Pokemon[][] | undefined>
 

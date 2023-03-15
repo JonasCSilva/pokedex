@@ -1,6 +1,8 @@
-import { DataContextIsLoading } from '@/contexts/DataContext'
 import { useContext } from 'react'
 import ClipLoader from 'react-spinners/ClipLoader'
+
+import { DataContextIsLoading } from '@/contexts/DataContext'
+
 import { Grid } from '../grid/Grid'
 import styles from './styles.module.scss'
 

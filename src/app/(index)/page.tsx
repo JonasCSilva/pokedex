@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google'
+
+import { Client } from '@/app/(index)/client'
+
 import styles from './page.module.scss'
-import { Client } from './client'
 
 const inter = Inter({ subsets: ['latin'] })
 

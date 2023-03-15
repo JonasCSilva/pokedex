@@ -1,4 +1,4 @@
-import { typesColors } from './typesColors'
+import { typesColors } from '@/lib/typesColors'
 
 export type TypesNames = keyof typeof typesColors
 

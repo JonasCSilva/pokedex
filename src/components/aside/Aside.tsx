@@ -1,8 +1,10 @@
+import Image from 'next/image'
+import { useContext } from 'react'
+
 import { PokemonContextPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
 import { typesColors } from '@/lib/typesColors'
-import Image from 'next/image'
-import { useContext } from 'react'
+
 import styles from './styles.module.scss'
 
 export function Aside() {

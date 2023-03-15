@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react'
 
 export const ScrollContextProgress = createContext<number | null>(null)
 export const ScrollContextSetProgess = createContext<Dispatch<SetStateAction<number>> | null>(null)
