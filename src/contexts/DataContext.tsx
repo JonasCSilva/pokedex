@@ -1,7 +1,7 @@
 import { getKey, getPokemon } from '@/lib/functions'
 import { Pokemon } from '@/lib/types'
 import { createContext, ReactNode, RefObject, useMemo } from 'react'
-import useSWRInfinite from 'swr/infinite'
+import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite'
 
 type SetSize = (size: number | ((_size: number) => number)) => Promise<Pokemon[][] | undefined>
 
@@ -12,7 +12,7 @@ export const DataContextRef = createContext<RefObject<HTMLElement> | null>(null)
 export const DataContextProgress = createContext(0)
 export const DataContextSetSize = createContext<SetSize | null>(null)
 
-const swrConfig = {
+const swrConfig: SWRInfiniteConfiguration = {
   revalidateIfStale: false,
   revalidateOnFocus: false,
   revalidateAll: false
