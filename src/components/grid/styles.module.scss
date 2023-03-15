@@ -1,0 +1,13 @@
+.main {
+  display: grid;
+  row-gap: 2rem;
+  column-gap: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  overflow-y: scroll;
+  padding: 2rem;
+  padding-left: 3rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

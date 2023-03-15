@@ -1,6 +1,7 @@
-.mainLoaderContainer {
+.loaderContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  grid-column: span 4;
+  height: 120px;
 }

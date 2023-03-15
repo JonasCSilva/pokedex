@@ -1,10 +1,10 @@
-import { ScrollContextProgess } from '@/contexts/ScrollContext'
+import { ScrollContextProgress } from '@/contexts/ScrollContext'
 import { motion } from 'framer-motion'
 import { useContext } from 'react'
 import styles from './styles.module.scss'
 
 export function Scrollbar() {
-  const progess = useContext(ScrollContextProgess)!
+  const progress = useContext(ScrollContextProgress)!
 
-  return <motion.div className={styles.progressBar} style={{ scaleX: progess }} />
+  return <motion.div className={styles.progressBar} style={{ scaleX: progress }} />
 }

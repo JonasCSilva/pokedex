@@ -6,6 +6,7 @@ import { memo } from 'react'
 import { Aside } from '@/components/aside/Aside'
 import { List } from '@/components/list/List'
 import { Scrollbar } from '@/components/scroll-bar/ScrollBar'
+import { DataContextProvider } from '@/contexts/DataContext'
 
 const MemoizedAside = memo(Aside)
 const MemoizedList = memo(List)
@@ -15,7 +16,9 @@ export function Client() {
   return (
     <PokemonContextProvider>
       <ScrollContextProvider>
-        <MemoizedList />
+        <DataContextProvider>
+          <MemoizedList />
+        </DataContextProvider>
         <MemoizedScrollbar />
       </ScrollContextProvider>
       <MemoizedAside />
