@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import { useContext, useRef } from 'react'
-import { useInViewport } from 'react-in-viewport'
 
 import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
@@ -12,7 +11,7 @@ import styles from './styles.module.scss'
 
 export function Card({ pokemon }: { pokemon: Pokemon }) {
   const myRef = useRef(null)
-  const { inViewport } = useInViewport(myRef, { threshold: 0.3 })
+  const isInView = useInView(myRef, { amount: 0.3 })
   const setPokemon = useContext(PokemonContextSetPokemon)!
 
   const { name, types, id } = pokemon
@@ -24,7 +23,7 @@ export function Card({ pokemon }: { pokemon: Pokemon }) {
       ref={myRef}
       onClick={() => setPokemon(pokemon)}
     >
-      {inViewport && (
+      {isInView && (
         <>
           <div className={styles.imageContainer}>
             <Image

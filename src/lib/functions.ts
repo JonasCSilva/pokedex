@@ -35,6 +35,9 @@ export async function getPokemon(key: string): Promise<Pokemon[]> {
             name
           }
         }
+        stats: pokemon_v2_pokemonstats {
+          base_stat
+        }
       }
     }`
   )
