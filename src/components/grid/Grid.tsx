@@ -1,7 +1,7 @@
 import deepEqual from 'fast-deep-equal'
 import { memo, useContext, useEffect, useRef } from 'react'
 
-import { Card } from '@/components/card/Card'
+import { GridCard } from '@/components/grid-card/GridCard'
 import { Loader } from '@/components/loader/Loader'
 import { DataContextData, DataContextSetSize } from '@/contexts/DataContext'
 import { ScrollContextSetProgess } from '@/contexts/ScrollContext'
@@ -9,7 +9,7 @@ import { LIMIT, SIZE } from '@/lib/consts'
 
 import styles from './styles.module.scss'
 
-const MemoizedCard = memo(Card, deepEqual)
+const MemoizedGridCard = memo(GridCard, deepEqual)
 const MemoizedLoader = memo(Loader)
 
 const getVariables = (
@@ -22,7 +22,7 @@ const getVariables = (
   const { scrollTop, offsetHeight } = element
 
   const size = length / SIZE
-  const target = SIZE * (size / 4) * (21 * 16 + 32) + 120 + 64
+  const target = SIZE * (size / 4) * (21 * 16 + 16 * 3) + 120 + 64
   const isThereMore = SIZE * (size + 1) < LIMIT
   const total = target - offsetHeight
   const shouldSetSize = scrollTop + offsetHeight >= target && isThereMore
@@ -55,7 +55,7 @@ export function Grid() {
   return (
     <main className={styles.main} onScroll={onScroll} ref={scrollElementRef}>
       {data.map(pokemon => (
-        <MemoizedCard key={pokemon.id} pokemon={pokemon} />
+        <MemoizedGridCard key={pokemon.id} pokemon={pokemon} />
       ))}
       <MemoizedLoader />
     </main>

@@ -12,9 +12,7 @@ export function Scrollbar() {
     damping: 30
   })
 
-  useEffect(() => {
-    scaleX.set(progress)
-  }, [scaleX, progress])
+  scaleX.set(progress)
 
   return <motion.div className={styles.progressBar} style={{ scaleX }} />
 }

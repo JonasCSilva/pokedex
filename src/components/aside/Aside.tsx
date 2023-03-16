@@ -1,62 +1,58 @@
-import Image from 'next/image'
-import { useContext } from 'react'
+import { AnimatePresence, motion, Transition } from 'framer-motion'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import { PokemonContextPokemon } from '@/contexts/PokemonContext'
-import { firstLetterUpperCase } from '@/lib/functions'
-import { typesColors } from '@/lib/typesColors'
 
+import { AsideCard } from '../aside-card/AsideCard'
 import styles from './styles.module.scss'
+
+const transition: Transition = {
+  type: 'tween',
+  duration: 0.35
+}
 
 export function Aside() {
   const pokemon = useContext(PokemonContextPokemon)
+  const [isFront, setIsFront] = useState(true)
+  const [show, setShow] = useState(false)
+  const firstRender = useRef(true)
+
+  useEffect(() => {
+    firstRender.current = false
+  }, [])
 
   return (
     <aside className={styles.aside}>
-      <main>
-        {pokemon && (
-          <>
-            <h2 className={styles.name}>{firstLetterUpperCase(pokemon.name)}</h2>
-            <h3 className={styles.id}>Nº {pokemon.id}</h3>
-            <div className={styles.imageContainer}>
-              <Image
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                alt={pokemon.name + ' sprite'}
-                fill
-                sizes='20vw'
-                className={styles.image}
-              />
-            </div>
-            <div className={styles.typesContainer}>
-              {pokemon.types.map(({ type: { name } }) => (
-                <span key={name} className={styles.type} style={{ backgroundColor: typesColors[name] }}>
-                  {name.toUpperCase()}
-                </span>
-              ))}
-            </div>
-            <div className={styles.stats}>
-              <div className={styles.stat}>
-                <h4>WEIGHT</h4>
-                <h5>{pokemon.weight / 10} Kg</h5>
-              </div>
-              <div className={styles.stat}>
-                <h4>BASE EXP</h4>
-                <h5>{pokemon.base_experience}</h5>
-              </div>
-              <div className={styles.stat}>
-                <h4>HEIGHT</h4>
-                <h5>{pokemon.height / 10} m</h5>
-              </div>
-            </div>
-            <div className={styles.abilitiesContainer}>
-              {pokemon.abilities.map(({ ability: { name } }) => (
-                <span key={name} className={styles.ability}>
-                  {name.toUpperCase()}
-                </span>
-              ))}
-            </div>
-          </>
-        )}
-      </main>
+      <AnimatePresence
+        onExitComplete={() => {
+          setIsFront(prev => !prev)
+        }}
+      >
+        {show ||
+          (isFront && (
+            <motion.main
+              transition={transition}
+              initial={!firstRender.current && { rotateY: 90 }}
+              animate={{ rotateY: 0, transition }}
+              exit={{ rotateY: 90 }}
+              key='front'
+            >
+              {pokemon && <AsideCard pokemon={pokemon} isFront={true} setShow={setShow} />}
+            </motion.main>
+          ))}
+        {!show ||
+          (!isFront && (
+            <motion.main
+              key='back'
+              transition={transition}
+              initial={{ rotateY: 90 }}
+              animate={{ rotateY: 0, transition }}
+              exit={{ rotateY: 90 }}
+            >
+              {pokemon && <AsideCard pokemon={pokemon} isFront={false} setShow={setShow} />}
+            </motion.main>
+          ))}
+      </AnimatePresence>
     </aside>
   )
 }

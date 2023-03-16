@@ -9,7 +9,7 @@ import { typesColors } from '@/lib/typesColors'
 
 import styles from './styles.module.scss'
 
-export function Card({ pokemon }: { pokemon: Pokemon }) {
+export function GridCard({ pokemon }: { pokemon: Pokemon }) {
   const myRef = useRef(null)
   const isInView = useInView(myRef, { amount: 0.3 })
   const setPokemon = useContext(PokemonContextSetPokemon)!
@@ -18,7 +18,8 @@ export function Card({ pokemon }: { pokemon: Pokemon }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.075, transition: { duration: 0.3 } }}
+      whileHover={{ scale: 1.075 }}
+      whileTap={{ scale: 0.975 }}
       className={styles.root}
       ref={myRef}
       onClick={() => setPokemon(pokemon)}
