@@ -1,23 +1,24 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
 import { GrRotateRight } from 'react-icons/gr'
 
+import { PokemonContextPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
-import { Pokemon } from '@/lib/types'
-import { typesColors } from '@/lib/typesColors'
 
 import styles from './styles.module.scss'
 
 export function AsideCard({
-  pokemon,
   isFront,
-  setShow
+  setShow,
+  children
 }: {
-  pokemon: Pokemon
   isFront: boolean
+  children: JSX.Element
   setShow: Dispatch<SetStateAction<boolean>>
 }) {
+  const pokemon = useContext(PokemonContextPokemon)!
+
   return (
     <>
       <motion.button
@@ -28,10 +29,12 @@ export function AsideCard({
         }}
         className={styles.flipButton}
       >
-        <GrRotateRight size='1.9rem'/>
+        <GrRotateRight size='1.9rem' />
       </motion.button>
-      <h2 className={styles.name}>{firstLetterUpperCase(pokemon.name)}</h2>
-      <h3 className={styles.id}>Nº {pokemon.id}</h3>
+      <header className={styles.header}>
+        <h2 className={styles.name}>{firstLetterUpperCase(pokemon.name)}</h2>
+        <h3 className={styles.id}>Nº {pokemon.id}</h3>
+      </header>
       <div className={styles.imageContainer}>
         <Image
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${isFront ? '' : 'back/'}${
@@ -43,34 +46,7 @@ export function AsideCard({
           className={styles.image}
         />
       </div>
-      <div className={styles.typesContainer}>
-        {pokemon.types.map(({ type: { name } }) => (
-          <span key={name} className={styles.type} style={{ backgroundColor: typesColors[name] }}>
-            {name.toUpperCase()}
-          </span>
-        ))}
-      </div>
-      <div className={styles.stats}>
-        <div className={styles.stat}>
-          <h4>WEIGHT</h4>
-          <h5>{pokemon.weight / 10} Kg</h5>
-        </div>
-        <div className={styles.stat}>
-          <h4>BASE EXP</h4>
-          <h5>{pokemon.base_experience}</h5>
-        </div>
-        <div className={styles.stat}>
-          <h4>HEIGHT</h4>
-          <h5>{pokemon.height / 10} m</h5>
-        </div>
-      </div>
-      <div className={styles.abilitiesContainer}>
-        {pokemon.abilities.map(({ ability: { name } }) => (
-          <span key={name} className={styles.ability}>
-            {name.toUpperCase()}
-          </span>
-        ))}
-      </div>
+      <footer className={styles.footer}>{children}</footer>
     </>
   )
 }

@@ -3,7 +3,8 @@ import { SWRInfiniteKeyLoader } from 'swr/infinite'
 import { SIZE } from '@/lib/consts'
 import { Pokemon } from '@/lib/types'
 
-export const firstLetterUpperCase = (string: string) => string.at(0)!.toUpperCase() + string.slice(1)
+export const firstLetterUpperCase = (string: string) =>
+  (string.at(0)!.toUpperCase() + string.slice(1)).replaceAll('-', ' ')
 
 async function fetchGraphQL(query: string) {
   const result = await fetch('https://beta.pokeapi.co/graphql/v1beta', {
@@ -37,6 +38,9 @@ export async function getPokemon(key: string): Promise<Pokemon[]> {
         }
         stats: pokemon_v2_pokemonstats {
           base_stat
+          stat: pokemon_v2_stat {
+            name
+          }
         }
       }
     }`

@@ -4,6 +4,8 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { PokemonContextPokemon } from '@/contexts/PokemonContext'
 
 import { AsideCard } from '../aside-card/AsideCard'
+import { AsideCardBack } from '../aside-card/aside-card-back/AsideCardBack'
+import { AsideCardFront } from '../aside-card/aside-card-front/AsideCardFront'
 import styles from './styles.module.scss'
 
 const transition: Transition = {
@@ -35,9 +37,14 @@ export function Aside() {
               initial={!firstRender.current && { rotateY: 90 }}
               animate={{ rotateY: 0, transition }}
               exit={{ rotateY: 90 }}
+              className={styles.main}
               key='front'
             >
-              {pokemon && <AsideCard pokemon={pokemon} isFront={true} setShow={setShow} />}
+              {pokemon && (
+                <AsideCard isFront={true} setShow={setShow}>
+                  <AsideCardFront />
+                </AsideCard>
+              )}
             </motion.main>
           ))}
         {!show ||
@@ -48,8 +55,13 @@ export function Aside() {
               initial={{ rotateY: 90 }}
               animate={{ rotateY: 0, transition }}
               exit={{ rotateY: 90 }}
+              className={styles.main}
             >
-              {pokemon && <AsideCard pokemon={pokemon} isFront={false} setShow={setShow} />}
+              {pokemon && (
+                <AsideCard isFront={false} setShow={setShow}>
+                  <AsideCardBack />
+                </AsideCard>
+              )}
             </motion.main>
           ))}
       </AnimatePresence>

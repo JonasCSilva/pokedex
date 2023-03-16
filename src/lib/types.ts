@@ -20,5 +20,8 @@ export type Pokemon = {
   }[]
   stats: {
     base_stat: number
+    stat: {
+      name: string
+    }
   }[]
 }
