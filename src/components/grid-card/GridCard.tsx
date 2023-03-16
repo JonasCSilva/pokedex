@@ -5,7 +5,7 @@ import { useContext, useRef } from 'react'
 import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
 import { Pokemon } from '@/lib/types'
-import { typesColors } from '@/lib/typesColors'
+import { typesColors } from '@/lib/consts'
 
 import styles from './styles.module.scss'
 

@@ -25,6 +25,13 @@ export function DataContextProvider({ children }: { children: ReactNode }) {
   const data: Pokemon[] = useMemo(() => {
     const array: Pokemon[] = []
     if (!rawData) return array
+
+    const pokemon = array.concat(...rawData)
+
+    const largest = pokemon.map(pokemon => Math.max(...pokemon.stats.map(_ => _.base_stat)))
+
+    console.log(Math.max(...largest))
+
     return array.concat(...rawData)
   }, [rawData])
 

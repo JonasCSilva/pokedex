@@ -1,6 +1,8 @@
-import { typesColors } from '@/lib/typesColors'
+import { statsLimits, typesColors } from '@/lib/consts'
 
 export type TypesNames = keyof typeof typesColors
+
+export type StatsNames = keyof typeof statsLimits
 
 export type Pokemon = {
   name: string
@@ -21,7 +23,7 @@ export type Pokemon = {
   stats: {
     base_stat: number
     stat: {
-      name: string
+      name: StatsNames
     }
   }[]
 }
