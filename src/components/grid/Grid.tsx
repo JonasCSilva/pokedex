@@ -1,5 +1,6 @@
 import deepEqual from 'fast-deep-equal'
-import { memo, useContext, useEffect, useRef } from 'react'
+import debounce from 'lodash/debounce'
+import { memo, useContext, useEffect, useRef, useCallback } from 'react'
 
 import { GridCard } from '@/components/grid-card/GridCard'
 import { Loader } from '@/components/loader/Loader'
@@ -8,10 +9,12 @@ import { ScrollContextSetProgess } from '@/contexts/ScrollContext'
 import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { LIMIT, SIZE } from '@/lib/consts'
 
+import { ScrollButton } from '../scroll-button/ScrollButton'
 import styles from './styles.module.scss'
 
 const MemoizedGridCard = memo(GridCard, deepEqual)
 const MemoizedLoader = memo(Loader)
+const MemoizedScrollButton = memo(ScrollButton)
 
 const getVariables = (
   element: HTMLElement,
@@ -39,13 +42,20 @@ export function Grid() {
   const scrollElementRef = useRef<HTMLElement>(null)
   const selectedPokemon = useContext(SelectedPokemonContextPokemon)!
 
+  const debouncedSetProgress = debounce((progress: number) => setProgress(progress), 100, {
+    leading: true,
+    maxWait: 100
+  })
+
   const onScroll = () => {
     const { progress, shouldSetSize } = getVariables(scrollElementRef.current!, data.length)
-    setProgress(progress)
+    debouncedSetProgress(progress)
 
     if (shouldSetSize) {
       setSize(prev => prev + 1)
     }
+
+    return progress
   }
 
   useEffect(() => {
@@ -54,12 +64,15 @@ export function Grid() {
     setProgress(progress)
   }, [data, setProgress])
 
+  const handleClick = useCallback(() => void scrollElementRef.current!.scrollTo({ top: 0, behavior: 'smooth' }), [])
+
   return (
     <main className={styles.main} onScroll={onScroll} ref={scrollElementRef}>
       {data.map(pokemon => (
         <MemoizedGridCard key={pokemon.id} pokemon={pokemon} isSelected={selectedPokemon?.id === pokemon.id} />
       ))}
       <MemoizedLoader />
+      <MemoizedScrollButton onClick={handleClick} />
     </main>
   )
 }

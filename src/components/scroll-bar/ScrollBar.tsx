@@ -9,7 +9,7 @@ export function Scrollbar() {
   const progress = useContext(ScrollContextProgress)!
   const scaleX = useSpring(progress, {
     stiffness: 200,
-    damping: 30
+    damping: 30,
   })
 
   scaleX.set(progress)

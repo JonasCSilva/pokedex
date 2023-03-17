@@ -1,0 +1,13 @@
+.button {
+  position: fixed;
+  height: 3rem;
+  width: 3rem;
+  bottom: 1.5rem;
+  left: calc(70% + 4.5rem);
+  border-radius: 0.8rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
