@@ -1,51 +1,28 @@
 import { motion, useInView } from 'framer-motion'
-import Image from 'next/image'
-import { useContext, useRef } from 'react'
+import { useContext, useRef, memo } from 'react'
 
-import { PokemonContextSetPokemon } from '@/contexts/PokemonContext'
-import { firstLetterUpperCase } from '@/lib/functions'
+import { SelectedPokemonContextSetPokemon } from '@/contexts/SelectedPokemonContext'
 import { Pokemon } from '@/lib/types'
-import { typesColors } from '@/lib/consts'
 
+import { GridCardContent } from '../grid-card-content/GridCardContent'
 import styles from './styles.module.scss'
 
-export function GridCard({ pokemon }: { pokemon: Pokemon }) {
-  const myRef = useRef(null)
-  const isInView = useInView(myRef, { amount: 0.3 })
-  const setPokemon = useContext(PokemonContextSetPokemon)!
+const MemoizedGridCardContent = memo(GridCardContent)
 
-  const { name, types, id } = pokemon
+export function GridCard({ pokemon, isSelected }: { pokemon: Pokemon; isSelected: boolean }) {
+  const myRef = useRef(null)
+  const isInView = useInView(myRef, { amount: 0 })
+  const setSelectedPokemon = useContext(SelectedPokemonContextSetPokemon)!
 
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.975 }}
-      className={styles.root}
+      className={[styles.root, isSelected ? styles.gradient : ''].join(' ')}
       ref={myRef}
-      onClick={() => setPokemon(pokemon)}
+      onClick={() => setSelectedPokemon(pokemon)}
     >
-      {isInView && (
-        <>
-          <div className={styles.imageContainer}>
-            <Image
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-              alt={name + ' sprite'}
-              fill
-              sizes='10vw'
-              className={styles.image}
-            />
-          </div>
-          <h4 className={styles.id}>Nº {id}</h4>
-          <h2>{firstLetterUpperCase(name)}</h2>
-          <div className={styles.typesContainer}>
-            {types.map(({ type: { name } }) => (
-              <span key={name} className={styles.type} style={{ backgroundColor: typesColors[name] }}>
-                {name.toUpperCase()}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
+      <main className={styles.main}>{isInView && <MemoizedGridCardContent pokemon={pokemon} />}</main>
     </motion.div>
   )
 }

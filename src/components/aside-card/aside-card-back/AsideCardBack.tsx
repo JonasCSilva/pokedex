@@ -1,14 +1,14 @@
 import { motion } from 'framer-motion'
 import { useContext } from 'react'
 
-import { PokemonContextPokemon } from '@/contexts/PokemonContext'
+import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { statsColors, statsLimits } from '@/lib/consts'
 import { firstLetterUpperCase } from '@/lib/functions'
 
 import styles from './styles.module.scss'
 
 export function AsideCardBack() {
-  const pokemon = useContext(PokemonContextPokemon)!
+  const pokemon = useContext(SelectedPokemonContextPokemon)!
 
   return (
     <>

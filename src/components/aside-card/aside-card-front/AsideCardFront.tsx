@@ -1,13 +1,13 @@
 import { useContext } from 'react'
 
-import { PokemonContextPokemon } from '@/contexts/PokemonContext'
-import { firstLetterUpperCase } from '@/lib/functions'
+import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { typesColors } from '@/lib/consts'
+import { firstLetterUpperCase } from '@/lib/functions'
 
 import styles from './styles.module.scss'
 
 export function AsideCardFront() {
-  const pokemon = useContext(PokemonContextPokemon)!
+  const pokemon = useContext(SelectedPokemonContextPokemon)!
 
   return (
     <>

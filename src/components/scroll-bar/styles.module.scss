@@ -4,7 +4,15 @@
   left: 0;
   right: 0;
   height: 0.5rem;
-  background-color: rgb(220, 220, 220);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 47%,
+    rgba(0, 0, 0, 1) 47%,
+    rgba(0, 0, 0, 1) 53%,
+    rgba(255, 0, 0, 1) 53%,
+    rgba(255, 0, 0, 1) 100%,
+  );
   transform-origin: 0%;
   width: 100vw;
 }

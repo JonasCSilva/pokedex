@@ -5,6 +5,7 @@ import { GridCard } from '@/components/grid-card/GridCard'
 import { Loader } from '@/components/loader/Loader'
 import { DataContextData, DataContextSetSize } from '@/contexts/DataContext'
 import { ScrollContextSetProgess } from '@/contexts/ScrollContext'
+import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { LIMIT, SIZE } from '@/lib/consts'
 
 import styles from './styles.module.scss'
@@ -36,6 +37,7 @@ export function Grid() {
   const setProgress = useContext(ScrollContextSetProgess)!
   const data = useContext(DataContextData)
   const scrollElementRef = useRef<HTMLElement>(null)
+  const selectedPokemon = useContext(SelectedPokemonContextPokemon)!
 
   const onScroll = () => {
     const { progress, shouldSetSize } = getVariables(scrollElementRef.current!, data.length)
@@ -55,7 +57,7 @@ export function Grid() {
   return (
     <main className={styles.main} onScroll={onScroll} ref={scrollElementRef}>
       {data.map(pokemon => (
-        <MemoizedGridCard key={pokemon.id} pokemon={pokemon} />
+        <MemoizedGridCard key={pokemon.id} pokemon={pokemon} isSelected={selectedPokemon?.id === pokemon.id} />
       ))}
       <MemoizedLoader />
     </main>

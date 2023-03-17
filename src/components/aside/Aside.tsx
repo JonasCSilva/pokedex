@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, Transition } from 'framer-motion'
 import { useContext, useEffect, useRef, useState } from 'react'
 
-import { PokemonContextPokemon } from '@/contexts/PokemonContext'
+import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 
 import { AsideCard } from '../aside-card/AsideCard'
 import { AsideCardBack } from '../aside-card/aside-card-back/AsideCardBack'
@@ -14,7 +14,7 @@ const transition: Transition = {
 }
 
 export function Aside() {
-  const pokemon = useContext(PokemonContextPokemon)
+  const pokemon = useContext(SelectedPokemonContextPokemon)
   const [isFront, setIsFront] = useState(true)
   const [show, setShow] = useState(false)
   const firstRender = useRef(true)

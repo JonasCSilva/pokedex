@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useContext } from 'react'
 import { GrRotateRight } from 'react-icons/gr'
 
-import { PokemonContextPokemon } from '@/contexts/PokemonContext'
+import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
 
 import styles from './styles.module.scss'
@@ -17,7 +17,7 @@ export function AsideCard({
   children: JSX.Element
   setShow: Dispatch<SetStateAction<boolean>>
 }) {
-  const pokemon = useContext(PokemonContextPokemon)!
+  const pokemon = useContext(SelectedPokemonContextPokemon)!
 
   return (
     <>
