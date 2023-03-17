@@ -18,7 +18,7 @@ export function GridCard({ pokemon }: { pokemon: Pokemon }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.075 }}
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.975 }}
       className={styles.root}
       ref={myRef}

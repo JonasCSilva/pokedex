@@ -1,8 +1,32 @@
 import { statsLimits, typesColors } from '@/lib/consts'
 
-export type TypesNames = keyof typeof typesColors
+type TypesNames =
+  | 'bug'
+  | 'dark'
+  | 'dragon'
+  | 'electric'
+  | 'fairy'
+  | 'fighting'
+  | 'fire'
+  | 'flying'
+  | 'ghost'
+  | 'grass'
+  | 'ground'
+  | 'ice'
+  | 'normal'
+  | 'poison'
+  | 'psychic'
+  | 'rock'
+  | 'steel'
+  | 'water'
 
-export type StatsNames = keyof typeof statsLimits
+type StatsNames = 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed'
+
+export type StatsColors = { [key in StatsNames]: string }
+
+export type StatsLimits = { [key in StatsNames]: number }
+
+export type TypesColors = { [key in TypesNames]: string }
 
 export type Pokemon = {
   name: string
