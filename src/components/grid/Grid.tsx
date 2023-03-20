@@ -38,9 +38,9 @@ const getVariables = (
 export function Grid() {
   const setSize = useContext(DataContextSetSize)!
   const setProgress = useContext(ScrollContextSetProgess)!
+  const selectedPokemon = useContext(SelectedPokemonContextPokemon)!
   const data = useContext(DataContextData)
   const scrollElementRef = useRef<HTMLElement>(null)
-  const selectedPokemon = useContext(SelectedPokemonContextPokemon)!
 
   const debouncedSetProgress = debounce((progress: number) => setProgress(progress), 100, {
     leading: true,

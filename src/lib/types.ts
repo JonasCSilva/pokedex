@@ -51,3 +51,10 @@ export type Pokemon = {
     }
   }[]
 }
+
+export enum Side {
+  front = 'front',
+  flippingFromBack = 'flippingFromBack',
+  flippingFromFront = 'flippingFromFront',
+  back = 'back'
+}

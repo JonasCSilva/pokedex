@@ -5,17 +5,18 @@ import { GrRotateRight } from 'react-icons/gr'
 
 import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
 import { firstLetterUpperCase } from '@/lib/functions'
+import { Side } from '@/lib/types'
 
 import styles from './styles.module.scss'
 
 export function AsideCard({
-  isFront,
-  setShow,
+  side,
+  setSide,
   children
 }: {
-  isFront: boolean
+  side: Side
   children: JSX.Element
-  setShow: Dispatch<SetStateAction<boolean>>
+  setSide: Dispatch<SetStateAction<Side>>
 }) {
   const pokemon = useContext(SelectedPokemonContextPokemon)!
 
@@ -25,7 +26,11 @@ export function AsideCard({
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => {
-          setShow(prev => !prev)
+          if (side === Side.back) {
+            setSide(Side.flippingFromBack)
+          } else if (side === Side.front) {
+            setSide(Side.flippingFromFront)
+          }
         }}
         className={styles.flipButton}
       >
@@ -37,9 +42,9 @@ export function AsideCard({
       </header>
       <div className={styles.imageContainer}>
         <Image
-          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${isFront ? '' : 'back/'}${
-            pokemon.id
-          }.png`}
+          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+            side === Side.front ? '' : 'back/'
+          }${pokemon.id}.png`}
           alt={pokemon.name + ' sprite'}
           fill
           sizes='20vw'

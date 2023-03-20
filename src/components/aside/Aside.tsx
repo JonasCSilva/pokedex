@@ -2,6 +2,7 @@ import { AnimatePresence, motion, Transition } from 'framer-motion'
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import { SelectedPokemonContextPokemon } from '@/contexts/SelectedPokemonContext'
+import { Side } from '@/lib/types'
 
 import { AsideCard } from '../aside-card/AsideCard'
 import { AsideCardBack } from '../aside-card/aside-card-back/AsideCardBack'
@@ -15,8 +16,7 @@ const transition: Transition = {
 
 export function Aside() {
   const pokemon = useContext(SelectedPokemonContextPokemon)
-  const [isFront, setIsFront] = useState(true)
-  const [show, setShow] = useState(false)
+  const [side, setSide] = useState(Side.front)
   const firstRender = useRef(true)
 
   useEffect(() => {
@@ -27,43 +27,45 @@ export function Aside() {
     <aside className={styles.aside}>
       <AnimatePresence
         onExitComplete={() => {
-          setIsFront(prev => !prev)
+          if (side === Side.flippingFromBack) {
+            setSide(Side.front)
+          } else if (side === Side.flippingFromFront) {
+            setSide(Side.back)
+          }
         }}
       >
-        {show ||
-          (isFront && (
-            <motion.main
-              transition={transition}
-              initial={!firstRender.current && { rotateY: 90 }}
-              animate={{ rotateY: 0, transition }}
-              exit={{ rotateY: 90 }}
-              className={styles.main}
-              key='front'
-            >
-              {pokemon && (
-                <AsideCard isFront={true} setShow={setShow}>
-                  <AsideCardFront />
-                </AsideCard>
-              )}
-            </motion.main>
-          ))}
-        {!show ||
-          (!isFront && (
-            <motion.main
-              key='back'
-              transition={transition}
-              initial={{ rotateY: 90 }}
-              animate={{ rotateY: 0, transition }}
-              exit={{ rotateY: 90 }}
-              className={styles.main}
-            >
-              {pokemon && (
-                <AsideCard isFront={false} setShow={setShow}>
-                  <AsideCardBack />
-                </AsideCard>
-              )}
-            </motion.main>
-          ))}
+        {side === Side.front && (
+          <motion.main
+            transition={transition}
+            initial={!firstRender.current && { rotateY: 90 }}
+            animate={{ rotateY: 0, transition }}
+            exit={{ rotateY: 90 }}
+            className={styles.main}
+            key={Side.front}
+          >
+            {pokemon && (
+              <AsideCard side={Side.front} setSide={setSide}>
+                <AsideCardFront />
+              </AsideCard>
+            )}
+          </motion.main>
+        )}
+        {side === Side.back && (
+          <motion.main
+            key={Side.back}
+            transition={transition}
+            initial={{ rotateY: 90 }}
+            animate={{ rotateY: 0, transition }}
+            exit={{ rotateY: 90 }}
+            className={styles.main}
+          >
+            {pokemon && (
+              <AsideCard side={Side.back} setSide={setSide}>
+                <AsideCardBack />
+              </AsideCard>
+            )}
+          </motion.main>
+        )}
       </AnimatePresence>
     </aside>
   )
