@@ -49,6 +49,8 @@ export function AsideCard({
           fill
           sizes='20vw'
           className={styles.image}
+          quality={100}
+          priority
         />
       </div>
       <footer className={styles.footer}>{children}</footer>

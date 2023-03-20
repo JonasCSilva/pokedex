@@ -1,7 +1,7 @@
-import deepEqual from 'fast-deep-equal'
 import debounce from 'lodash/debounce'
 import { memo, useContext, useEffect, useRef, useCallback } from 'react'
 
+// import { compare } from 'swr/_internal'
 import { GridCard } from '@/components/grid-card/GridCard'
 import { Loader } from '@/components/loader/Loader'
 import { DataContextData, DataContextSetSize } from '@/contexts/DataContext'
@@ -12,7 +12,7 @@ import { LIMIT, SIZE } from '@/lib/consts'
 import { ScrollButton } from '../scroll-button/ScrollButton'
 import styles from './styles.module.scss'
 
-const MemoizedGridCard = memo(GridCard, deepEqual)
+const MemoizedGridCard = memo(GridCard)
 const MemoizedLoader = memo(Loader)
 const MemoizedScrollButton = memo(ScrollButton)
 

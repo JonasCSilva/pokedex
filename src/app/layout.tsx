@@ -1,4 +1,8 @@
+import { Inter } from 'next/font/google'
+
 import './globals.scss'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Pokedex',
@@ -7,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en'>
+    <html lang='en' className={inter.className}>
       <body>{children}</body>
     </html>
   )
